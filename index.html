@@ -65,7 +65,8 @@
     console.log(directionsAPI);
     fetch(directionsAPI, {
       method: "GET",
-      contentType: "application/json"
+      contentType: "application/json",
+      mode: "no-cors"
     })
       .then(res => res.json())
       .then(data => {
