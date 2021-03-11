@@ -12,7 +12,7 @@
 
   <link href="css/styles.css" rel="stylesheet" />
 
-  <title>Hello, world!</title>
+  <title>AI Dog</title>
 </head>
 
 <body class="d-flex h-100 text-center text-white bg-dark">
@@ -20,7 +20,7 @@
   <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
     <header class="mb-auto">
       <div>
-        <h3 class="float-md-start mb-0">Accessible Directions</h3>
+        <h3 class="float-md-start mb-0">AI Dog</h3>
         <nav class="nav nav-masthead justify-content-center float-md-end">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
           <a class="nav-link" href="#">Features</a>
@@ -70,6 +70,7 @@
     })
       .then(res => res.json())
       .then(data => {
+        console.log(res.status);
         console.log(data);
       })
       .catch(error => {
