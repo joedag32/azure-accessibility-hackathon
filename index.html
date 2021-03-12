@@ -52,6 +52,7 @@
           </div>
         </div>
 
+        <div id="using-XMLHttpRequest"></div>
         <div class="col-auto">
           <button type="submit" id="submit" class="btn btn-primary">Submit</button>
         </div>
@@ -64,29 +65,42 @@
   </div>
 </body>
 <script>
-  const azureURL = 'https://accesibledirectionsV2.azurewebsites.net/api/dirAPI';
-  let address = '40.7105199,-74.0084579|40.7110058,-74.009122';
-  const directionsAPI = azureURL + '?address=' + address 
-  const submitButton = document.getElementById('submit');
 
-  submitButton.onclick = getDirections();
+let $div = document.querySelector('#using-XMLHttpRequest');
 
-  function getDirections(e) {
-    console.log(directionsAPI);
-    fetch(directionsAPI, {
-      method: "GET",
-      mode: "no-cors"
-    })
-    .then(res => console.log(res));
-    /*.then(res => res.json())
-    .then(data => {
-       console.log(data);
-      })
-    .catch(error => {
-       console.error(error);
-      });
-      */
-  }  
+  const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
+  let startAddress = '40.7105199,-74.0084579';
+  let endAddress = '40.7110058,-74.009122';
+  const directionsAPI = azureURL + '?startAddress=' + startAddress + '&endAddress=' + endAddress;
+  
+  //console.log(directionsAPI);
+     var elem = document.createElement('textarea');
+    elem.innerHTML = directionsAPI;
+    var decodedurl = elem.innerText;
+     console.log(decodedurl);
+  const xhr = new XMLHttpRequest(),
+      method = "GET",
+      url = decodedurl;
+  
+  xhr.open(method, url, true);
+  xhr.onreadystatechange = function () {
+    // In local files, status is 0 upon success in Mozilla Firefox
+    if(xhr.readyState === XMLHttpRequest.DONE) {
+      var status = xhr.status;
+      if (status === 0 || (status >= 200 && status < 400)) {
+        // The request has been completed successfully
+        //console.log(xhr.responseText.json());
+        var responseData = xhr.responseText;
+        alert("Success: " + responseData.length  + " chars received.");
+        console.log(responseData);
+      } else {
+        // Oh no! There has been an error with the request!
+         console.log("error!");
+      }
+    }
+  };
+  xhr.send();
+  
 </script>
 
 </html>
