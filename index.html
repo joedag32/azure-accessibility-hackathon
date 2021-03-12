@@ -76,16 +76,17 @@
     console.log(directionsAPI);
     fetch(directionsAPI, {
       method: "GET",
-      contentType: "application/json",
       mode: "no-cors"
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
+    .then(res => console.log(res));
+    /*.then(res => res.json())
+    .then(data => {
+       console.log(data);
       })
-      .catch(error => {
-        console.error(error);
+    .catch(error => {
+       console.error(error);
       });
+      */
   }  
 </script>
 
