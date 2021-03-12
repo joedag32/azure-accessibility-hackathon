@@ -74,7 +74,7 @@
 
   function getDirections(e) {
     console.log(directionsAPI);
-    fetch(directionsAPI, {
+    fetch('https://www.reddit.com/r/javascript/top/.json?limit=5', {
       method: "GET",
       mode: "no-cors"
     })
