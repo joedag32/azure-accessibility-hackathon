@@ -53,6 +53,7 @@
         </div>
 
         <div id="using-XMLHttpRequest"></div>
+        <div id="directionsSteps"></div>
         <div class="col-auto">
           <button type="submit" id="submit" class="btn btn-primary">Submit</button>
         </div>
@@ -93,6 +94,7 @@ let $div = document.querySelector('#using-XMLHttpRequest');
         var responseData = xhr.responseText;
         alert("Success: " + responseData.length  + " chars received.");
         console.log(responseData);
+        outputDirections(JSON.parse(responseData));
       } else {
         // Oh no! There has been an error with the request!
          console.log("error!");
@@ -100,6 +102,19 @@ let $div = document.querySelector('#using-XMLHttpRequest');
     }
   };
   xhr.send();
+
+  function outputDirections(responseData) {
+    const directionsSteps = document.getElementById('directionsSteps');
+    directionsSteps.innerHTML += '<ul>';
+
+    console.log('joe: ' + responseData);
+
+    for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {
+      directionsSteps.innerHTML += '<li>' + value.describeMovement + '</li>';
+    }
+    directionsSteps.innerHTML += '</ul>';
+  }
+  
   
 </script>
 
