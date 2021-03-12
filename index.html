@@ -34,10 +34,21 @@
       <p class="lead">Let us help you determine if your journey is accessible or not!</p>
       <form class="row gy-2 gx-3 justify-content-md-center">
         <div class="col-8">
-          <label class="visually-hidden" for="inlineFormInputGroupUsername">Destination</label>
+          <select class="form-select" aria-label="Campus">
+            <option selected>Open this select menu</option>
+            <option value="pace">Pace University</option>
+            <option value="mit">MIT</option>
+            <option value="gt">Georgia Tech</option>
+          </select>
+          <label class="visually-hidden" for="currentLocation">Where are You?</label>
           <div class="input-group">
-            <input type="text" class="form-control" id="inlineFormInputGroupUsername"
-              placeholder="Where are you going?">
+            <input type="text" class="form-control" id="currentLocation"
+              placeholder="Please enter your current location: ex. 40.7105199,-74.0084579 or 55 Main Street, Mainville, NY 55555">
+          </div>
+          <label class="visually-hidden" for="destination">Destination</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="destination"
+              placeholder="Please enter Where are you going: : ex. 40.7105199,-74.0084579 or 55 Main Street, Mainville, NY 55555">
           </div>
         </div>
 
@@ -72,9 +83,10 @@
       .then(data => {
         console.log(data);
       })
-      .catch(error => {
-        console.error(error);
-      });
+      //.catch(error => {
+        //console.error(error);
+      //})
+      ;
   }  
 </script>
 
