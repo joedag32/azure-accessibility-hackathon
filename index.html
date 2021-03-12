@@ -12,7 +12,7 @@
 
   <link href="css/styles.css" rel="stylesheet" />
 
-  <title>AI Dog</title>
+  <title>AI Dog K TEST</title>
 </head>
 
 <body class="d-flex h-100 text-center text-white bg-dark">
@@ -65,9 +65,8 @@
 </body>
 <script>
   const azureURL = 'https://accesibledirectionsV2.azurewebsites.net/api/dirAPI';
-  let startAddress = '40.7105199,-74.0084579';
-  let endAddress = '40.7110058,-74.009122';
-  const directionsAPI = azureURL + '?startAddress=' + startAddress + '&endAddress=' + endAddress;
+  let address = '40.7105199,-74.0084579|40.7110058,-74.009122';
+  const directionsAPI = azureURL + '?address=' + address 
   const submitButton = document.getElementById('submit');
 
   submitButton.onclick = getDirections();
