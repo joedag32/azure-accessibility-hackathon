@@ -19,6 +19,12 @@ img.header {
 #directionsResult {
     text-align: left;
 }
+#map_canvas {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px
+}
 footer {
     margin-top: 20px;
     padding-top: 10px;

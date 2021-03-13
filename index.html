@@ -29,7 +29,8 @@
     </header>
 
     <main class="px-3">
-      <img src="images/splash.jpg" alt="splash image of a woman and man walking with a service animal" class="splash img-fluid" />
+      <img src="images/splash.jpg" alt="splash image of a woman and man walking with a service animal"
+        class="splash img-fluid" />
       <p class="lead">Let us help you find an accessible route!</p>
       <form id="search-form" class="row gy-2 gx-3 justify-content-md-center">
         <div class="col-8">
@@ -51,19 +52,19 @@
           </div>
         </div>
       </form>
-            <button type="submit" id="submit" class="btn btn-primary">Submit</button>
-          
+      <button type="submit" id="submit" class="btn btn-primary">Submit</button>
 
-        <div id="using-XMLHttpRequest"></div>
-        <div id="directionsResult" class="row">
-          <div class="col-6">
-            <h2>Directions</h2>
-            <div id="directionsSteps"></div>
-          </div>
-          <div class="col-6">
-            Map with route can go here.
-          </div>
+
+      <div id="using-XMLHttpRequest"></div>
+      <div id="directionsResult" class="row">
+        <div class="col-6">
+          <h2>Directions</h2>
+          <div id="directionsSteps"></div>
         </div>
+        <div class="col-6">
+          <div id="map_canvas" style="border: 2px solid #3872ac;"></div>
+        </div>
+      </div>
     </main>
 
     <footer class="text-white-50">
@@ -71,43 +72,50 @@
     </footer>
   </div>
 </body>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkNZylSVJND4hX0fJFCPAi52JGU8e-Z4o">
+</script>
 <script>
-
-let $div = document.querySelector('#using-XMLHttpRequest');
-
   const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
-  let startAddress = '40.71004552109853,-74.00802245514046';
-  let endAddress = '40.711638353732006,-74.00871970294276';
-  const directionsAPI = azureURL + '?startAddress=' + startAddress + '&endAddress=' + endAddress;
-  
-  //console.log(directionsAPI);
-     var elem = document.createElement('textarea');
+
+  const submitButton = document.getElementById('submit');
+  submitButton.addEventListener("click", getDirections, false);
+
+  function getDirections(e) {
+    console.log('getDirections called');
+    let $div = document.querySelector('#using-XMLHttpRequest');
+
+    let startAddress = '40.71004552109853,-74.00802245514046';
+    let endAddress = '40.711638353732006,-74.00871970294276';
+    const directionsAPI = azureURL + '?startAddress=' + startAddress + '&endAddress=' + endAddress;
+
+    var elem = document.createElement('textarea');
     elem.innerHTML = directionsAPI;
     var decodedurl = elem.innerText;
-     console.log(decodedurl);
-  const xhr = new XMLHttpRequest(),
+    //console.log(decodedurl);
+    const xhr = new XMLHttpRequest(),
       method = "GET",
       url = decodedurl;
-  
-  xhr.open(method, url, true);
-  xhr.onreadystatechange = function () {
-    // In local files, status is 0 upon success in Mozilla Firefox
-    if(xhr.readyState === XMLHttpRequest.DONE) {
-      var status = xhr.status;
-      if (status === 0 || (status >= 200 && status < 400)) {
-        // The request has been completed successfully
-        //console.log(xhr.responseText.json());
-        var responseData = xhr.responseText;
-        alert("Success: " + responseData.length  + " chars received.");
-        console.log(responseData);
-        outputDirections(JSON.parse(responseData));
-      } else {
-        // Oh no! There has been an error with the request!
-         console.log("error!");
+
+    xhr.open(method, url, true);
+    xhr.onreadystatechange = function () {
+      // In local files, status is 0 upon success in Mozilla Firefox
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        var status = xhr.status;
+        if (status === 0 || (status >= 200 && status < 400)) {
+          // The request has been completed successfully
+          //console.log(xhr.responseText.json());
+          var responseData = xhr.responseText;
+          alert("Success: " + responseData.length + " chars received.");
+          console.log(responseData);
+          outputDirections(JSON.parse(responseData));
+        } else {
+          // Oh no! There has been an error with the request!
+          console.log("error!");
+        }
       }
-    }
-  };
-  xhr.send();
+    };
+    xhr.send();
+  }
 
   function outputDirections(responseData) {
     const directionsSteps = document.getElementById('directionsSteps');
@@ -115,12 +123,53 @@ let $div = document.querySelector('#using-XMLHttpRequest');
 
     // loop through responseData and cleaned up describeMovement steps
     for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {
-      directionsSteps.innerHTML += '<li>' + value.describeMovement.substring(2).replace( /(<([^>]+)>)/ig, '').replace("Destination will be", ". Destination will be").slice(0, -1) + '</li>';
+      directionsSteps.innerHTML += '<li>' + value.describeMovement.substring(2).replace(/(<([^>]+)>)/ig, '').replace("Destination will be", ". Destination will be").slice(0, -1) + '</li>';
     }
     directionsSteps.innerHTML += '</ul>';
   }
-  
-  
+
+  // Google Map
+  /*
+  var map;
+  var bounds = new google.maps.LatLngBounds();
+
+  function initialize() {
+    console.log('map loaded!');
+    map = new google.maps.Map(
+      document.getElementById("map_canvas"), {
+      center: new google.maps.LatLng(34, 108),
+      zoom: 13,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var jsonData = {
+      "overview_polyline": {
+        "points": "wgnwFzwubMy@pBQ`@UOcBsAcBuA{AmAGK_@UkAaA\\g@VTBDv@n@Zq@PQAQHOa@cAQg@"
+      }
+    };
+    var path = google.maps.geometry.encoding.decodePath(jsonData.overview_polyline.points);
+    console.log(path);
+    for (var i = 0; i < path.length; i++) {
+      bounds.extend(path[i]);
+    }
+
+    var polyline = new google.maps.Polyline({
+      path: path,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map
+      // strokeColor: "#0000FF",
+      // strokeOpacity: 1.0,
+      // strokeWeight: 2
+    });
+    polyline.setMap(map);
+    map.fitBounds(bounds);
+
+  }
+  */
 </script>
 
 </html>
