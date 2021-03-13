@@ -77,8 +77,8 @@
 let $div = document.querySelector('#using-XMLHttpRequest');
 
   const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
-  let startAddress = '40.7105199,-74.0084579';
-  let endAddress = '40.7110058,-74.009122';
+  let startAddress = '40.71004552109853,-74.00802245514046';
+  let endAddress = '40.711638353732006,-74.00871970294276';
   const directionsAPI = azureURL + '?startAddress=' + startAddress + '&endAddress=' + endAddress;
   
   //console.log(directionsAPI);
@@ -114,8 +114,9 @@ let $div = document.querySelector('#using-XMLHttpRequest');
     const directionsSteps = document.getElementById('directionsSteps');
     directionsSteps.innerHTML += '<ul>';
 
+    // loop through responseData and cleaned up describeMovement steps
     for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {
-      directionsSteps.innerHTML += '<li>' + value.describeMovement + '</li>';
+      directionsSteps.innerHTML += '<li>' + value.describeMovement.substring(2).replace( /(<([^>]+)>)/ig, '').replace("Destination will be", ". Destination will be").slice(0, -1) + '</li>';
     }
     directionsSteps.innerHTML += '</ul>';
   }

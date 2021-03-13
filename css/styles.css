@@ -13,6 +13,9 @@
 #submit {
     margin-top: 20px;
 }
+#directionsResult {
+    text-align: left;
+}
 footer {
     margin-top: 20px;
     padding-top: 10px;
