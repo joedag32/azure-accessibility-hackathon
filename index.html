@@ -33,7 +33,7 @@
         class="splash img-fluid" />
       <p class="lead">Let us help you find an accessible route!</p>
       <form id="search-form" class="row gy-2 gx-3 justify-content-md-center">
-        <div class="col-8">
+        <div class="col-9 offset-md-1">
           <select class="form-select" aria-label="Campus">
             <option selected>Choose your Campus</option>
             <option value="pace">Pace University</option>
@@ -43,20 +43,24 @@
           <label class="visually-hidden" for="currentLocation">Where are You?</label>
           <div class="input-group">
             <input type="text" class="form-control" id="currentLocation"
-              placeholder="Please enter your current location: ex. 40.7105199,-74.0084579 or 55 Main Street, Mainville, NY 55555">
+              placeholder="Please enter your current location: 55 Main Street, Mainville, NY 55555 or lat, long">
           </div>
           <label class="visually-hidden" for="destination">Where are you Going?</label>
           <div class="input-group">
             <input type="text" class="form-control" id="destination"
-              placeholder="Please enter Where are you going: : ex. 40.7105199,-74.0084579 or 55 Main Street, Mainville, NY 55555">
+              placeholder="Please enter Where are you going: 229 B Baker Street, Mainville, NY 55555, or lat, long">
           </div>
         </div>
+        <button type="button" id="submit" class="btn btn-primary">Submit</button>
       </form>
-      <button type="submit" id="submit" class="btn btn-primary">Submit</button>
-
+      
+      <div id="loading-icon" class="d-none">
+        <img src="images/Rolling-1s-200px.gif" alt="loading indicator" width="200" height="200" aria-hidden="true"/>
+        <p>Calculating an accessible route...</p>
+      </div>
 
       <div id="using-XMLHttpRequest"></div>
-      <div id="directionsResult" class="row">
+      <div id="directionsResult" class="row d-none">
         <div class="col-6">
           <h2>Directions</h2>
           <div id="directionsSteps"></div>
@@ -78,6 +82,9 @@
   const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
 
   const submitButton = document.getElementById('submit');
+  const searchFormContainer = document.getElementById('search-form');
+  const loadingIcon = document.getElementById('loading-icon');
+  const directionsResultContainer = document.getElementById('directionsResult');
   submitButton.addEventListener("click", getDirections, false);
 
   function getDirections(e) {
@@ -115,9 +122,15 @@
       }
     };
     xhr.send();
+
+    // hide form and disalay loader
+    searchFormContainer.classList.add('d-none');
+    loadingIcon.classList.remove('d-none');
   }
 
   function outputDirections(responseData) {
+    loadingIcon.classList.add('d-none');
+    directionsResultContainer.classList.remove('d-none');
     const directionsSteps = document.getElementById('directionsSteps');
     directionsSteps.innerHTML += '<ul>';
 
