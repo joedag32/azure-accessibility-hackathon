@@ -12,6 +12,9 @@
 
   <link href="css/styles.css" rel="stylesheet" />
 
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry&key=AIzaSyDkNZylSVJND4hX0fJFCPAi52JGU8e-Z4o"></script>
+
   <title>AI Dog</title>
 </head>
 
@@ -76,8 +79,6 @@
     </footer>
   </div>
 </body>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkNZylSVJND4hX0fJFCPAi52JGU8e-Z4o">
-</script>
 <script>
   const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
 
@@ -125,8 +126,8 @@
           // The request has been completed successfully
           //console.log(xhr.responseText.json());
           var responseData = xhr.responseText;
-          alert("Success: " + responseData.length + " chars received.");
-          console.log(responseData);
+          // alert("Success: " + responseData.length + " chars received.");
+          // console.log(responseData);
           outputDirections(JSON.parse(responseData));
         } else {
           // Oh no! There has been an error with the request!
@@ -139,6 +140,9 @@
     // hide form and disalay loader
     searchFormContainer.classList.add('d-none');
     loadingIcon.classList.remove('d-none');
+    var point = "wgnwFzwubMy@pBQ`@UOcBsAcBuA{AmAGK_@UkAaA\\g@VTBDv@n@Zq@PQAQHOa@cAQg@";
+    // Call Google Map init. The co-ord can be center of start-end
+    initialize_map(point,40.71004552109853,-74.00802245514046);
   }
 
   function outputDirections(responseData) {
@@ -154,7 +158,41 @@
     directionsSteps.innerHTML += '</ul>';
   }
 
-  // Google Map
+  // Makes Google Map center based on lat, long
+
+  function initialize_map(polyline_pt,lat,long) {
+    //alert("Map not available");
+
+    var myLatlng = new google.maps.LatLng(lat, long);
+    var myOptions = {
+        zoom: 16,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+    var decodedPath = google.maps.geometry.encoding.decodePath(polyline_pt); 
+    var decodedLevels = decodeLevels("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+    var setRegion = new google.maps.Polyline({
+        path: decodedPath,
+        levels: decodedLevels,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        map: map
+    });
+  }
+
+  function decodeLevels(encodedLevelsString) {
+      var decodedLevels = [];
+
+      for (var i = 0; i < encodedLevelsString.length; ++i) {
+          var level = encodedLevelsString.charCodeAt(i) - 63;
+          decodedLevels.push(level);
+      }
+      return decodedLevels;
+  }
   /*
   var map;
   var bounds = new google.maps.LatLngBounds();
