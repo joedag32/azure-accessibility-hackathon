@@ -85,15 +85,28 @@
   const searchFormContainer = document.getElementById('search-form');
   const loadingIcon = document.getElementById('loading-icon');
   const directionsResultContainer = document.getElementById('directionsResult');
+  let startAddressValue = '40.71004552109853,-74.00802245514046';
+  let endAddressValue = '40.711638353732006,-74.00871970294276';
   submitButton.addEventListener("click", getDirections, false);
+
+  const currentLocationField = document.getElementById('currentLocation');
+  const destinationField = document.getElementById('destination');
+  currentLocationField.addEventListener('input', updateStartAddressValue);
+  destinationField.addEventListener('input', updatEndAddressValue);
+
+  function updateStartAddressValue(e) {
+    startAddressValue = document.getElementById('currentLocation').value;
+  }
+  function updatEndAddressValue(e) {
+    endAddressValue = document.getElementById('destination').value;
+  }
 
   function getDirections(e) {
     console.log('getDirections called');
-    let $div = document.querySelector('#using-XMLHttpRequest');
+    console.log('inputs: ' + startAddressValue + ' - ' + endAddressValue);
 
-    let startAddress = '40.71004552109853,-74.00802245514046';
-    let endAddress = '40.711638353732006,-74.00871970294276';
-    const directionsAPI = azureURL + '?startAddress=' + startAddress + '&endAddress=' + endAddress;
+    const $div = document.querySelector('#using-XMLHttpRequest');
+    const directionsAPI = azureURL + '?startAddress=' + startAddressValue + '&endAddress=' + endAddressValue;
 
     var elem = document.createElement('textarea');
     elem.innerHTML = directionsAPI;
