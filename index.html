@@ -12,7 +12,7 @@
 
   <link href="css/styles.css" rel="stylesheet" />
 
-  <title>AI Dog K TEST</title>
+  <title>AI Dog</title>
 </head>
 
 <body class="d-flex h-100 text-center text-white bg-dark">
@@ -30,12 +30,12 @@
     </header>
 
     <main class="px-3">
-      <img src="images/splash.jpg" class="splash img-fluid" />
-      <p class="lead">Let us help you determine if your journey is accessible or not!</p>
-      <form class="row gy-2 gx-3 justify-content-md-center">
+      <img src="images/splash.jpg" alt="splash image of a woman and man walking with a service animal" class="splash img-fluid" />
+      <p class="lead">Let us help you find an accessible route!</p>
+      <form id="search-form" class="row gy-2 gx-3 justify-content-md-center">
         <div class="col-8">
           <select class="form-select" aria-label="Campus">
-            <option selected>Open this select menu</option>
+            <option selected>Choose your Campus</option>
             <option value="pace">Pace University</option>
             <option value="mit">MIT</option>
             <option value="gt">Georgia Tech</option>
@@ -45,23 +45,30 @@
             <input type="text" class="form-control" id="currentLocation"
               placeholder="Please enter your current location: ex. 40.7105199,-74.0084579 or 55 Main Street, Mainville, NY 55555">
           </div>
-          <label class="visually-hidden" for="destination">Destination</label>
+          <label class="visually-hidden" for="destination">Where are you Going?</label>
           <div class="input-group">
             <input type="text" class="form-control" id="destination"
               placeholder="Please enter Where are you going: : ex. 40.7105199,-74.0084579 or 55 Main Street, Mainville, NY 55555">
           </div>
         </div>
+      </form>
+            <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+          
 
         <div id="using-XMLHttpRequest"></div>
-        <div id="directionsSteps"></div>
-        <div class="col-auto">
-          <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+        <div id="directionsResult" class="row">
+          <div class="col-6">
+            <h2>Directions</h2>
+            <div id="directionsSteps"></div>
+          </div>
+          <div class="col-6">
+            Map with route can go here.
+          </div>
         </div>
-      </form>
     </main>
 
     <footer class="text-white-50">
-      <p>Footer info or copyright can go here.</p>
+      <p>© 2021 AI Dog</p>
     </footer>
   </div>
 </body>
@@ -106,8 +113,6 @@ let $div = document.querySelector('#using-XMLHttpRequest');
   function outputDirections(responseData) {
     const directionsSteps = document.getElementById('directionsSteps');
     directionsSteps.innerHTML += '<ul>';
-
-    console.log('joe: ' + responseData);
 
     for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {
       directionsSteps.innerHTML += '<li>' + value.describeMovement + '</li>';
