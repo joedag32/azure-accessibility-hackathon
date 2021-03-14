@@ -71,6 +71,9 @@
         <div class="col-6">
           <div id="map_canvas" style="border: 2px solid #3872ac;"></div>
         </div>
+        <div class="col-6">
+          <div id="map_canvas2Points" style="border: 2px solid #3872ac;"></div>
+        </div>
       </div>
     </main>
 
@@ -148,14 +151,14 @@
     loadingIcon.classList.add('d-none');
     directionsResultContainer.classList.remove('d-none');
     const directionsSteps = document.getElementById('directionsSteps');
-    directionsSteps.innerHTML += '<p>From: ' + startAddressValue + '</p><p>To: ' + endAddressValue + '</p>';
+    directionsSteps.innerHTML += "From:<br>" + startAddressValue + "<br>To:<br>" + endAddressValue;
     directionsSteps.innerHTML += '<ul>';
 
     // loop through responseData and cleaned up describeMovement steps
     for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {
       directionsSteps.innerHTML += '<li>' + value.describeMovement.substring(2).replace(/(<([^>]+)>)/ig, '').replace("Destination will be", ". Destination will be").slice(0, -1);
-        directionsSteps.innerHTML += '<span class="distance"> - ' + value.distance_meters + ' meters / ≈' + parseInt(value.distance_meters * 3.281) + ' feet</span>';
-        directionsSteps.innerHTML += '<span class="time"> - ' + parseInt(value.duration_seconds) + ' seconds / ≈' + parseInt(value.duration_seconds/60) + ' minutes</span>';
+        directionsSteps.innerHTML += '<span class="distance"> - ' + value.distance_meters + ' meters / ' + parseInt(value.distance_meters * 3.281) + ' feet</span>';
+        directionsSteps.innerHTML += '<span class="time"> - ' + parseInt(value.duration_seconds) + ' seconds / ' + parseInt(value.duration_seconds/60) + ' minutes</span>';
       directionsSteps.innerHTML +=  '</li>';
 
     }
@@ -163,7 +166,12 @@
 
     var point = responseData.DIRECTIONS.overview_polyline;
     // Call Google Map init. The co-ord can be center of start-end
-    initialize_map(point,responseData.DIRECTIONS.startLocation.latitude,responseData.DIRECTIONS.startLocation.longitude);
+    initialize_map(point,40.71004552109853,-74.00802245514046);
+
+    var imgencodedData = responseData.IMGENCODED;
+
+    initialize_mapImgEncoded(imgencodedData,40.71004552109853,-74.00802245514046)
+
   }
 
   // Makes Google Map center based on lat, long
@@ -190,6 +198,41 @@
         strokeWeight: 2,
         map: map
     });
+  }
+  function initialize_mapImgEncoded(encodedDict,lat,long) {
+    //alert("Map not available");
+
+    var myLatlng = new google.maps.LatLng(lat, long);
+    var myOptions = {
+        zoom: 16,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas2Points"), myOptions);
+    
+
+    for (const[key, value] of Object.entries(encodedDict)) {
+      
+      if(encodedDict.sideWalk == "True"){
+        var textDisplayTitle = "Accesible  ✓"
+      } else if (encodedDict.sideWalk == "False"){
+        var textDisplayTitle = "Not Accesible  ✖"
+      } else {
+        var textDisplayTitle = "Unknown"
+      }
+
+      var contentTxt = "<div style='float:left'><img src='" + "data:image/png;base64," + encodedDict.encodedImg + "'></div><div style='float:right; padding: 10px;'><b>" + textDisplayTitle + 
+        "</b><br/> Latitude: " + encodedDict.lat + "<br/> Longitude: " +  encodedDict.long + "</div>"
+      var infowindow = new google.maps.InfoWindow({
+        content: contentTxt
+      });
+      var pointMarker = new google.maps.LatLng(encodedDict.lat, encodedDict.long);
+      var marker = new google.maps.Marker({
+        position: pointMarker,
+        map,
+        title: "Point",
+      });
+    } 
   }
 
   function decodeLevels(encodedLevelsString) {
