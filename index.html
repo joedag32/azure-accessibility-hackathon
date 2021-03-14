@@ -141,9 +141,7 @@
     // hide form and disalay loader
     searchFormContainer.classList.add('d-none');
     loadingIcon.classList.remove('d-none');
-    var point = "wgnwFzwubMy@pBQ`@UOcBsAcBuA{AmAGK_@UkAaA\\g@VTBDv@n@Zq@PQAQHOa@cAQg@";
-    // Call Google Map init. The co-ord can be center of start-end
-    initialize_map(point,40.71004552109853,-74.00802245514046);
+
   }
 
   function outputDirections(responseData) {
@@ -161,6 +159,10 @@
 
     }
     directionsSteps.innerHTML += '</ul>';
+
+    var point = responseData.DIRECTIONS.overview_polyline;
+    // Call Google Map init. The co-ord can be center of start-end
+    initialize_map(point,40.71004552109853,-74.00802245514046);
   }
 
   // Makes Google Map center based on lat, long
