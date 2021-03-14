@@ -20,6 +20,10 @@ img.header {
 #directionsResult {
     text-align: left;
 }
+.distance, .time {
+    display: block;
+    margin-left: 20px;
+}
 #map_canvas {
     height: 100%;
     min-height: 400px;
