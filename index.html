@@ -34,7 +34,7 @@
     <main class="px-3">
       <img src="images/splash.jpg" alt="splash image of a woman and man walking with a service animal"
         class="splash img-fluid" />
-      <p class="lead">Let us help you find an accessible route!</p>
+      <p class="lead">Let AI Dog help you find an accessible route!</p>
       <form id="search-form" class="row gy-2 gx-3 justify-content-md-center">
         <div class="col-9 offset-md-1">
           <select class="form-select" aria-label="Campus">
@@ -80,7 +80,8 @@
   </div>
 </body>
 <script>
-  const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
+  //const azureURL = 'https://accessibledirections.azurewebsites.net/api/dirAPI';
+  const azureURL = 'https://accesibledirectionsv2.azurewebsites.net/api/dirapi';
 
   const submitButton = document.getElementById('submit');
   const searchFormContainer = document.getElementById('search-form');
