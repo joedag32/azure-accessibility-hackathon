@@ -155,8 +155,8 @@
     // loop through responseData and cleaned up describeMovement steps
     for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {
       directionsSteps.innerHTML += '<li>' + value.describeMovement.substring(2).replace(/(<([^>]+)>)/ig, '').replace("Destination will be", ". Destination will be").slice(0, -1);
-        directionsSteps.innerHTML += '<span class="distance"> - ' + value.distance_meters + ' meters / ' + parseInt(value.distance_meters * 3.281) + ' feet</span>';
-        directionsSteps.innerHTML += '<span class="time"> - ' + parseInt(value.duration_seconds) + ' seconds / ' + parseInt(value.duration_seconds/60) + ' minutes</span>';
+        directionsSteps.innerHTML += '<span class="distance"> - ' + value.distance_meters + ' meters / ≈' + parseInt(value.distance_meters * 3.281) + ' feet</span>';
+        directionsSteps.innerHTML += '<span class="time"> - ' + parseInt(value.duration_seconds) + ' seconds / ≈' + parseInt(value.duration_seconds/60) + ' minutes</span>';
       directionsSteps.innerHTML +=  '</li>';
 
     }
