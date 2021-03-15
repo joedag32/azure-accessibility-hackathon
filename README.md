@@ -26,3 +26,7 @@ Massachusets Institute of Technology
 
 Pace University
 - 190 Massachusetts Ave, Cambridge, MA 02139 (Flour Bakery), 405 Memorial Dr, Cambridge, MA 02139 (Pi Beta Phi)
+
+# Back-end 
+
+Check out https://github.com/Kunal2341/AzureCompetition for details and code on how the backend code works
