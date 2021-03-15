@@ -129,6 +129,9 @@
     directionsResultContainer.classList.remove('d-none');	
     const directionsSteps = document.getElementById('directionsSteps');	
     directionsSteps.innerHTML += '<p>From: ' + startAddressValue + '</p><p>To: ' + endAddressValue + '</p>';	
+
+    directionsSteps.innerHTML += '<p>Elevation Change: ' + responseData.DIRECTIONS.elevationChange_meters + ' meters</p>';
+
     directionsSteps.innerHTML += '<ul>';	
     // loop through responseData and cleaned up describeMovement steps	
     for (const [key, value] of Object.entries(responseData.DIRECTIONS.process)) {	
@@ -147,7 +150,7 @@
     //alert("Map not available");
     var myLatlng = new google.maps.LatLng(lat, long);
     var myOptions = {
-        zoom: 17,
+        zoom: 18,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     }
@@ -182,7 +185,7 @@
           } else {
             var textDisplayTitle = "Unknown"
           }
-          var contentTxt = "<div style='float:left'><img src='" + "data:image/png;base64," + value.encodedImg + "' style='width:60px;height:60px;' ></div><div style='float:right; padding: 10px;'><b><p style='color:black;' > " + textDisplayTitle + "</p></b><br/> <p style='color:black;' >Latitude: " + value.lat + "</p> <br/> <p style='color:black;' >Longitude: " +  value.long + "</p></div>"
+          var contentTxt = "<div style='float:left'><img src='" + "data:image/png;base64," + value.encodedImg + "' style='width:70px;height:70px;' ></div><div style='float:right; padding: 10px;'><b><p style='color:black;' > " + textDisplayTitle + "</p></b><p style='color:black;' >Latitude: " + value.lat + "</p> <p style='color:black;' >Longitude: " +  value.long + "</p></div>"
           
           
           eval("marker" + key + " = new google.maps.Marker({map: map, position: new google.maps.LatLng(value.lat, value.long), title : 'Point' });")
