@@ -96,7 +96,7 @@
     const directionsAPI = azureURL + '?startAddress=' + startAddressValue + '&endAddress=' + endAddressValue;	
     var elem = document.createElement('textarea');	
     elem.innerHTML = directionsAPI;	
-    var decodedurl = elem.innerText;	
+    var decodedurl = elem.innerText;
     //console.log(decodedurl);	
     const xhr = new XMLHttpRequest(),	
       method = "GET",	
@@ -130,7 +130,7 @@
     const directionsSteps = document.getElementById('directionsSteps');	
     directionsSteps.innerHTML += '<p>From: ' + startAddressValue + '</p><p>To: ' + endAddressValue + '</p>';	
 
-    directionsSteps.innerHTML += '<p>Elevation Change: ' + responseData.DIRECTIONS.elevationChange_meters + ' meters</p>';
+    directionsSteps.innerHTML += '<p>Elevation Change: ' + responseData.DIRECTIONS.elevationChange_meters.toFixed(3) + ' meters</p>';
 
     directionsSteps.innerHTML += '<ul>';	
     // loop through responseData and cleaned up describeMovement steps	
@@ -145,12 +145,22 @@
     // Call Google Map init. The co-ord can be center of start-end
 	initialize_map(point,responseData.DIRECTIONS.startLocation.latitude,responseData.DIRECTIONS.startLocation.longitude, responseData);
 	}
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+
   // Makes Google Map center based on lat, long
   function initialize_map(polyline_pt,lat,long, responseData2) {
     //alert("Map not available");
     var myLatlng = new google.maps.LatLng(lat, long);
     var myOptions = {
-        zoom: 18,
+        zoom: 17,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     }
@@ -166,10 +176,28 @@
         strokeWeight: 2,
         map: map
     });
-    
-    
-    	
-      
+    /*
+    infoWindowLocation = new google.maps.InfoWindow();
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          infoWindowLocation.setPosition(pos);
+          infoWindowLocation.setContent("Your Here");
+          infoWindowLocation.open(map);
+        },
+        () => {
+          handleLocationError(true, infoWindowLocation, map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindowLocation, map.getCenter());
+    }
+    */
       for (const[key, value] of Object.entries(responseData2.IMGENCODED)) {
       	//console.log(key);
         //console.log(value);
@@ -202,8 +230,18 @@
         
         } 
     }
-  }
   
+
+  }
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+      browserHasGeolocation
+        ? "Error: The Geolocation service failed."
+        : "Error: Your browser doesn't support geolocation."
+    );
+    infoWindow.open(map);
+  }
   function decodeLevels(encodedLevelsString) {
       var decodedLevels = [];
       for (var i = 0; i < encodedLevelsString.length; ++i) {
